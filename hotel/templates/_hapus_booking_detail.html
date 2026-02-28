@@ -1,0 +1,17 @@
+{% load humanize %}
+<div class="detail-row"><span class="font-weight-bold">Tamu:</span> {{ booking.nama_tamu.nama }}</div>
+<div class="detail-row"><span class="font-weight-bold">Kamar/Aula:</span>
+    {% if booking.kamar %}
+    Kamar {{ booking.kamar.no_kamar }}
+    {% elif booking.aula %}
+    Aula {{ booking.aula.nama }}
+    {% else %}
+    -
+    {% endif %}
+</div>
+<div class="detail-row"><span class="font-weight-bold">Check-In:</span> {{ booking.tanggal_check_in|date:"d M Y H:i" }}
+</div>
+<div class="detail-row"><span class="font-weight-bold">Check-Out:</span> {{ booking.tanggal_check_out|date:"d M Y H:i"
+    }}</div>
+<div class="detail-row"><span class="font-weight-bold">Deposit:</span> Rp {{ booking.deposit_booking|intcomma }}</div>
+<div class="detail-row"><span class="font-weight-bold">Status:</span> {{ booking.get_status_display }}</div>

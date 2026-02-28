@@ -1,0 +1,98 @@
+{% load humanize %}
+<!-- Info Tamu -->
+<div class="row mb-3">
+    <div class="col-6">
+        <p class="mb-1 text-muted" style="font-size:13px;">Nama Tamu</p>
+        <h6 style="font-weight:600;">{{ check_in.nama_tamu.nama }}</h6>
+    </div>
+    <div class="col-6 text-right">
+        <p class="mb-1 text-muted" style="font-size:13px;">Jenis Kelamin</p>
+        <h6 style="font-weight:600;">{{ check_in.get_jenis_kelamin_display }}</h6>
+    </div>
+</div>
+
+<div class="row mb-3">
+    <div class="col-6">
+        <p class="mb-1 text-muted" style="font-size:13px;">Jumlah Dewasa</p>
+        <h6 style="font-weight:600;">{{ check_in.jumlah_dewasa }}</h6>
+    </div>
+    <div class="col-6 text-right">
+        <p class="mb-1 text-muted" style="font-size:13px;">Jumlah Anak</p>
+        <h6 style="font-weight:600;">{{ check_in.jumlah_anak }}</h6>
+    </div>
+</div>
+
+<div class="row mb-3">
+    <div class="col-6">
+        <p class="mb-1 text-muted" style="font-size:13px;">Tanggal Check-In</p>
+        <h6 style="font-weight:600;">{{ check_in.tanggal_check_in|date:"d M Y H:i" }}</h6>
+    </div>
+    <div class="col-6 text-right">
+        <p class="mb-1 text-muted" style="font-size:13px;">Tanggal Check-Out</p>
+        <h6 style="font-weight:600;">{{ check_in.tanggal_check_out|date:"d M Y H:i" }}</h6>
+    </div>
+</div>
+
+<hr style="border-top:2px dashed #ddd; margin:20px 0;">
+
+<!-- Rincian Harga -->
+<h5 style="font-weight:700; text-align:center; margin-bottom:15px;">
+    <i class="fas fa-receipt mr-1"></i>Rincian Harga
+</h5>
+
+<div class="text-center mb-3">
+    {% if check_in.kamar %}
+    <span class="badge" style="background:#2c3e50; color:white; padding:8px 16px; font-size:14px; border-radius:8px;">
+        Kamar {{ check_in.kamar.no_kamar }} &mdash; {{ check_in.kamar.tipe_kamar.nama }}
+    </span>
+    {% elif check_in.aula %}
+    <span class="badge" style="background:#2c3e50; color:white; padding:8px 16px; font-size:14px; border-radius:8px;">
+        Aula {{ check_in.aula.nama }}
+    </span>
+    {% endif %}
+</div>
+
+<table class="table table-borderless" style="margin-bottom:0;">
+    <tr>
+        <td>Harga Sebelum Diskon</td>
+        <td class="text-right">{{ check_in.total_harga_sebelum_diskon|floatformat:0|intcomma }} IDR</td>
+    </tr>
+    {% if check_in.diskon_persen > 0 %}
+    <tr style="color:#e74c3c;">
+        <td>Diskon ({{ check_in.diskon_persen|floatformat:1 }}%)</td>
+        <td class="text-right">-{{ check_in.diskon_rupiah|floatformat:0|intcomma }} IDR</td>
+    </tr>
+    {% endif %}
+    <tr style="font-weight:600;">
+        <td>Harga Setelah Diskon</td>
+        <td class="text-right">{{ check_in.total_harga_setelah_diskon|floatformat:0|intcomma }} IDR</td>
+    </tr>
+    <tr>
+        <td>Deposit</td>
+        <td class="text-right">{{ check_in.deposit|floatformat:0|intcomma }} IDR</td>
+    </tr>
+    <tr>
+        <td>PPN (0%)</td>
+        <td class="text-right">{{ check_in.vat|floatformat:0|intcomma }} IDR</td>
+    </tr>
+</table>
+
+<hr style="border-top:2px dashed #ddd; margin:20px 0;">
+
+<!-- Total -->
+<div class="text-center"
+    style="background:linear-gradient(135deg,#27ae60,#2ecc71); color:white; padding:18px; border-radius:10px; margin-bottom:20px;">
+    <p style="margin:0; font-size:13px; opacity:0.9;">Total Pembayaran</p>
+    <h3 style="margin:5px 0 0; font-weight:700;">{{ check_in.total_harus_dibayar|floatformat:0|intcomma }} IDR</h3>
+</div>
+
+<!-- Tombol Aksi -->
+<div class="text-center">
+    <a href="{% url 'check_in' %}" class="btn btn-outline-secondary mr-2" style="border-radius:8px; padding:10px 20px;">
+        <i class="fas fa-arrow-left mr-1"></i>Kembali
+    </a>
+    <a href="javascript:window.print()" class="btn btn-primary"
+        style="background:linear-gradient(135deg,#2c3e50,#34495e); border:none; border-radius:8px; padding:10px 20px;">
+        <i class="fas fa-print mr-1"></i>Cetak Invoice
+    </a>
+</div>

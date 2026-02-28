@@ -1,0 +1,17 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hapus Pengguna</title>
+</head>
+<body>
+    <h2>Apakah kamu yakin ingin menghapus {{ user.username }}?</h2>
+    <form method="POST">
+        {% csrf_token %}
+        <button type="submit">Ya, Hapus</button>
+    </form>
+    <a href="{% url 'user_list' %}">Batal</a>
+</body>
+</html>

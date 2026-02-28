@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tambah Inventaris</title>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}"> <!-- Pastikan path ini benar -->
+    <style>
+        .container {
+            width: 80%;
+            margin: 0 auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            background-color: #f9f9f9;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+        label {
+            margin: 10px 0 5px;
+        }
+        input, select {
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        button {
+            padding: 10px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #218838;
+        }
+        .back-link {
+            margin-top: 20px;
+            display: inline-block;
+            text-decoration: none;
+            color: #007bff;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        
+        }
+
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Tambah Inventaris Baru</h2>
+        <form method="POST">
+            {% csrf_token %}
+            <div>
+                {{ form.tanggal_pembelian.label_tag }}<br>
+                {{ form.tanggal_pembelian }}
+                {{ form.tanggal_pembelian.errors }}
+            </div>
+            <div>
+                {{ form.no_po_nota.label_tag }}<br>
+                {{ form.no_po_nota }}
+                {{ form.no_po_nota.errors }}
+            </div>
+            <div>
+                {{ form.nama_supplier.label_tag }}<br>
+                {{ form.nama_supplier }}
+                {{ form.nama_supplier.errors }}
+            </div>
+            <div>
+                {{ form.nama_barang.label_tag }}<br>
+                {{ form.nama_barang }}
+                {{ form.nama_barang.errors }}
+            </div>
+            <div>
+                {{ form.stok_awal.label_tag }}<br>
+                {{ form.stok_awal }}
+                {{ form.stok_awal.errors }}
+            </div>
+
+            <div>
+                {{ form.satuan.label_tag }}<br>
+                {{ form.satuan }}
+                {{ form.satuan.errors }}
+            </div>
+            <div>
+                {{ form.jumlah.label_tag }}<br>
+                {{ form.jumlah }}
+                {{ form.jumlah.errors }}
+            </div>
+            <div>
+                {{ form.harga_satuan.label_tag }}<br>
+                {{ form.harga_satuan }}
+                {{ form.harga_satuan.errors }}
+            </div>
+            <div>
+                {{ form.total_harga.label_tag }}<br>
+                {{ form.total_harga }}
+                {{ form.total_harga.errors }}
+            </div>
+            <button type="submit">Tambah Inventaris</button>
+        </form>
+        <a href="{% url 'inventory_list' %}" class="back-link">Kembali ke Daftar Inventaris</a>
+    </div>
+</body>
+</html>

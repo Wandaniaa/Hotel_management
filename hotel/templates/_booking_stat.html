@@ -1,0 +1,10 @@
+{% load humanize %}
+<a href="{% url 'booking_list' %}" style="text-decoration:none;">
+    <div class="stat-box" style="border-left-color:#8e44ad;">
+        <h3 style="color:#8e44ad;">
+            {{ booking_pending }}
+            <small style="font-size:14px;">/ {{ booking_confirmed }}</small>
+        </h3>
+        <p>Booking Pending / Confirmed</p>
+    </div>
+</a>

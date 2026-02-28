@@ -1,0 +1,829 @@
+<!DOCTYPE html>
+{% load static %}
+{% load widget_tweaks %}
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Checkin</title>
+
+  <!-- Google Font: Source Sans Pro -->
+  <link rel="stylesheet"
+    href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="{% static 'assets/plugins/fontawesome-free/css/all.min.css' %}">
+  <!-- Ionicons -->
+  <link rel="stylesheet"
+    href="{% static 'assets/https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css' %}">
+  <!-- Tempusdominus Bootstrap 4 -->
+  <link rel="stylesheet"
+    href="{% static 'assets/plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css' %}">
+  <!-- iCheck -->
+  <link rel="stylesheet" href="{% static 'assets/plugins/icheck-bootstrap/icheck-bootstrap.min.css' %}">
+  <!-- JQVMap -->
+  <link rel="stylesheet" href="{% static 'assets/plugins/jqvmap/jqvmap.min.css' %}">
+  <!-- Theme style -->
+  <link rel="stylesheet" href="{% static 'assets/dist/css/adminlte.min.css' %}">
+  <!-- overlayScrollbars -->
+  <link rel="stylesheet" href="{% static 'assets/plugins/overlayScrollbars/css/OverlayScrollbars.min.css' %}">
+  <!-- Daterange picker -->
+  <link rel="stylesheet" href="{% static 'assets/plugins/daterangepicker/daterangepicker.css' %}">
+  <!-- summernote -->
+  <link rel="stylesheet" href="{% static 'assets/plugins/summernote/summernote-bs4.min.css' %}">
+</head>
+
+<body class="hold-transition sidebar-mini layout-fixed">
+  <div class="wrapper">
+
+
+    <style>
+      body {
+        font-family: 'Poppins', sans-serif;
+        background-color: #F4F4F4;
+        color: #333;
+      }
+
+      /* === Navbar Modern === */
+      .navbar {
+        background: rgba(255, 255, 255, 0.7);
+        backdrop-filter: blur(10px);
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+        padding: 12px 24px;
+        border-radius: 10px;
+      }
+
+      /* === Sidebar Modern === */
+      .main-sidebar {
+        width: 250px;
+        background: rgba(30, 30, 30, 0.95);
+        color: #fff;
+        border-radius: 10px;
+        padding-top: 10px;
+      }
+
+      .nav-sidebar .nav-link {
+        color: rgba(255, 255, 255, 0.85);
+        font-weight: 500;
+        border-radius: 8px;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        padding: 12px 16px;
+      }
+
+      .nav-sidebar .nav-link:hover {
+        background: rgba(255, 255, 255, 0.15);
+        color: #fff;
+      }
+
+      .nav-sidebar .nav-link.active {
+        background: linear-gradient(135deg, #6a11cb, #2575fc);
+        font-weight: bold;
+        color: white;
+        box-shadow: 0 4px 10px rgba(106, 17, 203, 0.4);
+      }
+
+      .nav-sidebar .nav-link.logout {
+        background: rgba(255, 75, 92, 0.2);
+        color: #ff4b5c;
+        font-weight: bold;
+        transition: 0.3s;
+      }
+
+      .nav-sidebar .nav-link.logout:hover {
+        background: rgba(255, 75, 92, 0.4);
+        color: #d63447;
+        transform: scale(1.05);
+      }
+
+      /* === Card Style Modern === */
+      .card {
+        border-radius: 14px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        border: none;
+        background: rgba(255, 255, 255, 0.9);
+        backdrop-filter: blur(10px);
+        transition: all 0.3s ease-in-out;
+      }
+
+      .card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+      }
+
+      /* === Statistik Box === */
+      .small-box {
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease-in-out;
+        color: white;
+      }
+
+      .small-box:hover {
+        transform: translateY(-4px);
+      }
+
+      .small-box .inner {
+        padding: 20px;
+      }
+
+      .small-box .inner h3 {
+        font-size: 28px;
+        font-weight: 700;
+      }
+
+      .small-box .inner p {
+        font-size: 14px;
+        font-weight: 500;
+        opacity: 0.9;
+      }
+
+      .small-box-footer {
+        font-size: 13px;
+        font-weight: bold;
+        color: #fff;
+        background: rgba(255, 255, 255, 0.15);
+        border-radius: 0 0 12px 12px;
+        transition: background 0.3s;
+      }
+
+      .small-box-footer:hover {
+        background: rgba(255, 255, 255, 0.25);
+      }
+
+      /* === Button Style === */
+      .btn-primary {
+        background: linear-gradient(135deg, #6a11cb, #2575fc);
+        border: none;
+        border-radius: 8px;
+        padding: 10px 16px;
+        font-weight: bold;
+        transition: all 0.3s ease-in-out;
+        color: white;
+      }
+
+      .btn-primary:hover {
+        background: linear-gradient(135deg, #5a0fc8, #1f65d6);
+        transform: scale(1.05);
+      }
+
+      /* === Table Style === */
+      .table {
+        border-radius: 10px;
+        overflow: hidden;
+        background: white;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+      }
+
+      .table thead {
+        background: linear-gradient(135deg, #333, #555);
+        color: white;
+        font-weight: bold;
+      }
+
+      .table tbody tr:hover {
+        background-color: rgba(224, 224, 224, 0.5);
+      }
+
+      /* === Notepad Style (Pembersihan) === */
+      .notepad-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 16px;
+        padding: 20px 0;
+      }
+
+      .note {
+        width: 280px;
+        background: rgba(255, 255, 255, 0.9);
+        border-radius: 12px;
+        padding: 15px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+        transition: all 0.3s ease-in-out;
+      }
+
+      .note:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+      }
+
+      .note-header {
+        font-size: 16px;
+        font-weight: bold;
+        margin-bottom: 8px;
+      }
+
+      .note-content p {
+        font-size: 14px;
+        color: #555;
+      }
+
+      .note em {
+        font-style: italic;
+        font-size: 12px;
+        color: #777;
+      }
+
+      /* === Status Colors === */
+      .note.warning {
+        border-left: 5px solid #ff4b5c;
+        background: rgba(255, 75, 92, 0.1);
+      }
+
+      .note.warning .warning-message {
+        font-size: 12px;
+        font-weight: bold;
+        color: #ff4b5c;
+        margin-top: 8px;
+      }
+
+      .note.clean {
+        border-left: 5px solid #28a745;
+        background: rgba(40, 167, 69, 0.1);
+      }
+
+      /* === Responsive === */
+      @media (max-width: 768px) {
+        .notepad-container {
+          flex-direction: column;
+          align-items: center;
+        }
+      }
+    </style>
+
+    </head>
+
+    <body class="hold-transition sidebar-mini layout-fixed">
+      <div class="wrapper">
+
+
+
+        <!-- Navbar -->
+        <nav class="main-header navbar navbar-expand navbar-white navbar-light">
+          <!-- Left navbar links -->
+          <ul class="navbar-nav">
+            <li class="nav-item">
+              <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
+            </li>
+
+          </ul>
+
+          <!-- Right navbar links -->
+          <ul class="navbar-nav ml-auto">
+            <!-- Navbar Search -->
+
+            <div class="navbar-search-block">
+              <form class="form-inline">
+                <div class="input-group input-group-sm">
+                  <input class="form-control form-control-navbar" type="search" placeholder="Search"
+                    aria-label="Search">
+                  <div class="input-group-append">
+                    <button class="btn btn-navbar" type="submit">
+                      <i class="fas fa-search"></i>
+                    </button>
+                    <button class="btn btn-navbar" type="button" data-widget="navbar-search">
+                      <i class="fas fa-times"></i>
+                    </button>
+                  </div>
+                </div>
+              </form>
+            </div>
+            </li>
+
+            <!-- Messages Dropdown Menu -->
+
+
+            <!-- Notifications Dropdown Menu -->
+
+            <li class="nav-item">
+              <a class="nav-link" data-widget="fullscreen" href="#" role="button">
+                <i class="fas fa-expand-arrows-alt"></i>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" data-widget="control-sidebar" data-controlsidebar-slide="true" href="#" role="button">
+                <i class="fas fa-th-large"></i>
+              </a>
+            </li>
+          </ul>
+        </nav>
+        <!-- /.navbar -->
+
+        <!-- Main Sidebar Container -->
+        <aside class="main-sidebar sidebar-dark-primary elevation-4">
+          <!-- Brand Logo -->
+          <a href="index3.html" class="brand-link">
+            <img src="{% static 'assets/dist/img/hotell.jpeg' %}" alt="AdminLTE Logo"
+              class="brand-image img-circle elevation-3" style="opacity: .8">
+            <span class="brand-text font-weight-light">Mitra Hotel</span>
+          </a>
+
+          <!-- Sidebar -->
+          <div class="sidebar">
+            <!-- Sidebar user panel (optional) -->
+            <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+              <div class="image">
+                <img src="{% static 'assets/dist/img/avatar.png' %}" class="img-circle elevation-2" alt="User Image">
+              </div>
+              <div class="info">
+                <a href="#" class="d-block">{{ request.user.username }}</a>
+                <!-- Menampilkan username pengguna yang login -->
+              </div>
+            </div>
+
+            <!-- SidebarSearch Form -->
+            <div class="form-inline">
+              <div class="input-group" data-widget="sidebar-search">
+                <input class="form-control form-control-sidebar" type="search" placeholder="Search" aria-label="Search">
+                <div class="input-group-append">
+                  <button class="btn btn-sidebar">
+                    <i class="fas fa-search fa-fw"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Sidebar Menu -->
+            <nav class="mt-2">
+              <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu"
+                data-accordion="false">
+
+                <!-- Dashboard -->
+                <li class="nav-item">
+                  <a href="{% url 'base' %}" class="nav-link">
+                    <i class="nav-icon fas fa-tachometer-alt"></i>
+                    <p>Dashboard</p>
+                  </a>
+                </li>
+
+                <!-- User Control -->
+                <li class="nav-item">
+                  <a href="{% url 'user_list' %}" class="nav-link">
+                    <i class="nav-icon fas fa-user-cog"></i>
+                    <p>User Control</p>
+                  </a>
+                </li>
+
+                <!-- Reservasi -->
+                <li class="nav-item menu-open">
+                  <a href="#" class="nav-link active">
+                    <i class="nav-icon fas fa-copy"></i>
+                    <p>Reservasi <i class="right fas fa-angle-left"></i></p>
+                  </a>
+                  <ul class="nav nav-treeview">
+                    <li class="nav-item"><a href="{% url 'booking_list' %}" class="nav-link"><i
+                          class="far fa-circle nav-icon"></i>Booking</a></li>
+                    <li class="nav-item"><a href="{% url 'check_in' %}" class="nav-link active"><i
+                          class="far fa-circle nav-icon"></i>Check In</a></li>
+                    <li class="nav-item"><a href="{% url 'check_out' %}" class="nav-link"><i
+                          class="far fa-circle nav-icon"></i>Check Out</a></li>
+                    <li class="nav-item"><a href="{% url 'tamu_in_house' %}" class="nav-link"><i
+                          class="far fa-circle nav-icon"></i>Tamu In House</a></li>
+                  </ul>
+                </li>
+
+                <!-- Point of Sales -->
+                <li class="nav-item">
+                  <a href="#" class="nav-link">
+                    <i class="nav-icon fas fa-cash-register"></i>
+                    <p>Point Of Sales <i class="right fas fa-angle-left"></i></p>
+                  </a>
+                  <ul class="nav nav-treeview">
+                    <li class="nav-item"><a href="{% url 'tambah_room_service' %}" class="nav-link"><i
+                          class="far fa-circle nav-icon"></i>Room Services</a></li>
+                    <li class="nav-item"><a href="{% url 'cleaning_list' %}" class="nav-link"><i
+                          class="far fa-circle nav-icon"></i>Pembersihan Kamar</a></li>
+                  </ul>
+                </li>
+
+                <!-- Manajemen Kamar -->
+                <li class="nav-item">
+                  <a href="#" class="nav-link">
+                    <i class="nav-icon fas fa-hotel"></i>
+                    <p>Manajemen Kamar <i class="right fas fa-angle-left"></i></p>
+                  </a>
+                  <ul class="nav nav-treeview">
+                    <li class="nav-item"><a href="{% url 'room_list' %}" class="nav-link"><i
+                          class="far fa-circle nav-icon"></i>Kamar</a></li>
+                    <li class="nav-item"><a href="{% url 'room_type_list' %}" class="nav-link"><i
+                          class="far fa-circle nav-icon"></i>Tipe Kamar</a></li>
+                    <li class="nav-item"><a href="{% url 'hall_list' %}" class="nav-link"><i
+                          class="far fa-circle nav-icon"></i>Aula</a></li>
+                  </ul>
+                </li>
+
+                <!-- Manajemen Layanan -->
+                <li class="nav-item">
+                  <a href="#" class="nav-link">
+                    <i class="nav-icon fas fa-concierge-bell"></i>
+                    <p>Manajemen Layanan <i class="right fas fa-angle-left"></i></p>
+                  </a>
+                  <ul class="nav nav-treeview">
+                    <li class="nav-item"><a href="{% url 'layanan_list' %}" class="nav-link"><i
+                          class="far fa-circle nav-icon"></i>List Layanan</a></li>
+                    <li class="nav-item"><a href="{% url 'kategori_layanan_list' %}" class="nav-link"><i
+                          class="far fa-circle nav-icon"></i>Kategori Layanan</a></li>
+                  </ul>
+                </li>
+
+                <!-- Buku Tamu -->
+                <li class="nav-item">
+                  <a href="{% url 'tamu_list' %}" class="nav-link">
+                    <i class="nav-icon fas fa-address-book"></i>
+                    <p>Buku Tamu</p>
+                  </a>
+                </li>
+
+                <!-- Inventory -->
+                <li class="nav-item">
+                  <a href="#" class="nav-link">
+                    <i class="nav-icon fas fa-boxes"></i>
+                    <p>Inventory <i class="right fas fa-angle-left"></i></p>
+                  </a>
+                  <ul class="nav nav-treeview">
+                    <li class="nav-item"><a href="{% url 'inventory_list' %}" class="nav-link"><i
+                          class="far fa-circle nav-icon"></i>Pembelian</a></li>
+                    <li class="nav-item"><a href="{% url 'barang_terpakai' %}" class="nav-link"><i
+                          class="far fa-circle nav-icon"></i>Barang Terpakai</a></li>
+                    <li class="nav-item"><a href="{% url 'persediaan_barang' %}" class="nav-link"><i
+                          class="far fa-circle nav-icon"></i>Persediaan Barang</a></li>
+                  </ul>
+                </li>
+
+                <!-- Reports -->
+                <li class="nav-item">
+                  <a href="#" class="nav-link">
+                    <i class="nav-icon fas fa-file-alt"></i>
+                    <p>Reports <i class="right fas fa-angle-left"></i></p>
+                  </a>
+                  <ul class="nav nav-treeview">
+                    <li class="nav-item"><a href="{% url 'checkin_report_view' %}" class="nav-link"><i
+                          class="far fa-circle nav-icon"></i>Laporan Checkin</a></li>
+                    <li class="nav-item"><a href="{% url 'checkout_report_view' %}" class="nav-link"><i
+                          class="far fa-circle nav-icon"></i>Laporan Checkout</a></li>
+                    <li class="nav-item"><a href="{% url 'room_report_view' %}" class="nav-link"><i
+                          class="far fa-circle nav-icon"></i>Laporan Room</a></li>
+                    <li class="nav-item"><a href="{% url 'hall_report_view' %}" class="nav-link"><i
+                          class="far fa-circle nav-icon"></i>Laporan Aula</a></li>
+                    <li class="nav-item"><a href="{% url 'cleaning_log_report_view' %}" class="nav-link"><i
+                          class="far fa-circle nav-icon"></i>Pembersihan Kamar</a></li>
+                  </ul>
+                </li>
+
+                <!-- Logout -->
+                <li class="nav-item">
+                  <a href="{% url 'logout' %}" class="nav-link logout">
+                    <i class="nav-icon fas fa-sign-out-alt"></i>
+                    <p>Logout</p>
+                  </a>
+                </li>
+
+              </ul>
+            </nav>
+            <!-- /.sidebar-menu -->
+          </div>
+          <!-- /.sidebar -->
+        </aside>
+
+        <!-- Content Wrapper. Contains page content -->
+        <div class="content-wrapper">
+          <!-- Content Header (Page header) -->
+          <div class="content-header">
+            <div class="container-fluid">
+              <div class="row mb-2">
+                <div class="col-sm-6">
+                </div><!-- /.col -->
+                <div class="col-sm-6">
+                  <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a href="#">Reservasi</a></li>
+                    <li class="breadcrumb-item active">Checkin</li>
+                  </ol>
+                </div><!-- /.col -->
+              </div><!-- /.row -->
+            </div><!-- /.container-fluid -->
+          </div>
+          <!-- /.content-header -->
+          <div class="container my-4">
+            <div class="card shadow-lg" style="border-radius:14px; border:none;">
+              <div class="card-header text-center"
+                style="background:linear-gradient(135deg,#2c3e50,#34495e); color:white; border-radius:14px 14px 0 0; padding:18px;">
+                <h2 style="margin:0; font-size:22px;"><i class="fas fa-door-open mr-2"></i>Form Check-In</h2>
+              </div>
+              <div class="card-body" style="padding:25px;">
+                <form method="post">
+                  {% csrf_token %}
+
+                  <!-- Pilihan Kamar -->
+                  <div class="mb-4">
+                    <label for="room-select" class="form-label fw-bold">
+                      <i class="bi bi-house"></i> Pilih Kamar:
+                    </label>
+                    <select id="room-select" name="kamar" class="form-select">
+                      <option value="">-- Pilih Kamar --</option>
+                      {% for room in rooms %}
+                      <option value="{{ room.id }}" data-tipe="{{ room.tipe_kamar.nama }}"
+                        data-keterangan="{{ room.tipe_kamar.keterangan|default:" -" }}"
+                        data-fasilitas="{{ room.tipe_kamar.fasilitas_tambahan|default:" -" }}"
+                        data-harga="{{ room.tipe_kamar.harga }}">
+                        {{ room.no_kamar }}
+                      </option>
+                      {% endfor %}
+                    </select>
+                  </div>
+
+                  <!-- Pilihan Aula -->
+                  <div class="mb-4">
+                    <label for="hall-select" class="form-label fw-bold">
+                      <i class="bi bi-people"></i> Pilih Aula:
+                    </label>
+                    <select id="hall-select" name="aula" class="form-select">
+                      <option value="">-- Pilih Aula --</option>
+                      {% for hall in halls %}
+                      <option value="{{ hall.id }}" data-keterangan="{{ hall.keterangan|default:" -" }}"
+                        data-harga="{{ hall.harga }}">
+                        {{ hall.nama }}
+                      </option>
+                      {% empty %}
+                      <option value="">Tidak ada aula yang tersedia</option>
+                      {% endfor %}
+                    </select>
+                  </div>
+
+                  <!-- Detail Pilihan -->
+                  <div id="details" class="alert alert-info d-none">
+                    <h5><i class="bi bi-info-circle"></i> Detail</h5>
+                    <ul id="info" class="list-unstyled"></ul>
+                  </div>
+
+                  <!-- Form Tamu -->
+                  <div id="form-container" class="d-none">
+                    <h5 class="mt-4"><i class="bi bi-person"></i> Isi Data Tamu</h5>
+                    <p id="guest-info" class="text-muted"></p>
+
+                    <div class="row">
+                      <!-- Nama Tamu -->
+                      <!-- Nama Tamu -->
+                      <div class="col-md-6 mb-3">
+                        <label for="nama_tamu_input" class="form-label fw-bold">
+                          Nama Tamu:
+                        </label>
+
+                        <input type="text" id="nama_tamu_input" class="form-control" list="tamuList"
+                          placeholder="Ketik nama tamu" required>
+
+                        <datalist id="tamuList">
+                          {% for tamu in tamu_list %}
+                          <option value="{{ tamu.nama }}" data-id="{{ tamu.id }}"></option>
+                          {% endfor %}
+                        </datalist>
+
+                        <!-- field asli Django (hidden) -->
+                        <input type="hidden" name="nama_tamu" id="nama_tamu_hidden">
+                      </div>
+
+                      <!-- Jenis Kelamin -->
+                      <div class="col-md-6 mb-3">
+                        <label for="{{ form.jenis_kelamin.id_for_label }}" class="form-label fw-bold">Jenis
+                          Kelamin:</label>
+                        {{ form.jenis_kelamin }}
+                      </div>
+
+                      <!-- Jumlah Dewasa -->
+                      <div class="col-md-6 mb-3">
+                        <label for="{{ form.jumlah_dewasa.id_for_label }}" class="form-label fw-bold">Jumlah
+                          Dewasa:</label>
+                        {{ form.jumlah_dewasa }}
+                      </div>
+
+                      <!-- Jumlah Anak -->
+                      <div class="col-md-6 mb-3">
+                        <label for="{{ form.jumlah_anak.id_for_label }}" class="form-label fw-bold">Jumlah Anak:</label>
+                        {{ form.jumlah_anak }}
+                      </div>
+
+                      <!-- Tanggal Check-In -->
+                      <div class="col-md-6 mb-3">
+                        <label for="{{ form.tanggal_check_in.id_for_label }}" class="form-label fw-bold">Tanggal
+                          Check-In:</label>
+                        {{ form.tanggal_check_in }}
+                      </div>
+
+                      <!-- Tanggal Check-Out -->
+                      <div class="col-md-6 mb-3">
+                        <label for="{{ form.tanggal_check_out.id_for_label }}" class="form-label fw-bold">Tanggal
+                          Check-Out:</label>
+                        {{ form.tanggal_check_out }}
+                      </div>
+
+                      <!-- Deposit -->
+                      <div class="col-md-6 mb-3">
+                        <label for="{{ form.deposit.id_for_label }}" class="form-label fw-bold">Deposit:</label>
+                        {{ form.deposit }}
+                      </div>
+
+                      <!-- Layanan Tambahan -->
+                      <div class="col-md-6 mb-3">
+                        <label for="{{ form.layanan.id_for_label }}" class="form-label fw-bold">Layanan
+                          Tambahan:</label>
+                        {{ form.layanan }}
+                      </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-lg w-100 mt-4"
+                      style="background:linear-gradient(135deg,#27ae60,#2ecc71); color:white; border:none; border-radius:10px; padding:12px; font-weight:bold; font-size:16px;">
+                      <i class="fas fa-check-circle mr-2"></i>Check In
+                    </button>
+                  </div>
+                </form>
+              </div>
+
+              <script>
+                document.addEventListener('DOMContentLoaded', function () {
+                  const roomSelect = document.getElementById('room-select');
+                  const hallSelect = document.getElementById('hall-select');
+                  const info = document.getElementById('info');
+                  const guestInfo = document.getElementById('guest-info');
+                  const details = document.getElementById('details');
+                  const formContainer = document.getElementById('form-container');
+
+                  function formatRupiah(value) {
+                    const number = parseInt(value);
+                    if (isNaN(number)) return '-';
+                    return number.toLocaleString('id-ID') + ' IDR';
+                  }
+
+                  function updateDetails() {
+                    const selectedRoom = roomSelect.options[roomSelect.selectedIndex];
+                    const selectedHall = hallSelect.options[hallSelect.selectedIndex];
+
+                    if (selectedRoom.value) {
+                      const tipe = selectedRoom.getAttribute('data-tipe');
+                      const ket = selectedRoom.getAttribute('data-keterangan');
+                      const fasilitas = selectedRoom.getAttribute('data-fasilitas');
+                      const harga = selectedRoom.getAttribute('data-harga');
+
+                      info.innerHTML = `
+          <li><strong>Tipe Kamar:</strong> ${tipe}</li>
+          <li><strong>Keterangan:</strong></li>
+          <ul>
+            <li><strong>Kasur:</strong> ${ket}</li>
+            <li><strong>Fasilitas Tambahan:</strong> ${fasilitas}</li>
+            <li><strong>Harga:</strong> ${formatRupiah(harga)}</li>
+          </ul>
+        `;
+                      guestInfo.textContent = `Anda memilih Kamar: ${selectedRoom.textContent}`;
+                      details.classList.remove('d-none');
+                      formContainer.classList.remove('d-none');
+                    }
+
+                    else if (selectedHall.value) {
+                      const ket = selectedHall.getAttribute('data-keterangan');
+                      const harga = selectedHall.getAttribute('data-harga');
+
+                      info.innerHTML = `
+          <li><strong>Keterangan:</strong> ${ket}</li>
+          <li><strong>Harga:</strong> ${formatRupiah(harga)}</li>
+        `;
+                      guestInfo.textContent = `Anda memilih Aula: ${selectedHall.textContent}`;
+                      details.classList.remove('d-none');
+                      formContainer.classList.remove('d-none');
+                    }
+
+                    else {
+                      info.innerHTML = '';
+                      guestInfo.textContent = '';
+                      details.classList.add('d-none');
+                      formContainer.classList.add('d-none');
+                    }
+                  }
+
+                  roomSelect.addEventListener('change', function () {
+                    hallSelect.selectedIndex = 0; // reset aula
+                    updateDetails();
+                  });
+
+                  hallSelect.addEventListener('change', function () {
+                    roomSelect.selectedIndex = 0; // reset kamar
+                    updateDetails();
+                  });
+                });
+
+                document.addEventListener('DOMContentLoaded', function () {
+                  const select = document.getElementById('{{ form.nama_tamu.id_for_label }}');
+
+                  // bikin input search
+                  const searchInput = document.createElement('input');
+                  searchInput.type = 'text';
+                  searchInput.className = 'form-control mb-2';
+                  searchInput.placeholder = 'Ketik nama tamu...';
+
+                  // sisipkan input sebelum select
+                  select.parentNode.insertBefore(searchInput, select);
+
+                  searchInput.addEventListener('input', function () {
+                    const keyword = this.value.toLowerCase();
+
+                    Array.from(select.options).forEach(option => {
+                      if (option.value === '') return;
+
+                      const text = option.text.toLowerCase();
+                      option.style.display = text.includes(keyword) ? 'block' : 'none';
+                    });
+                  });
+                });
+
+                document.addEventListener('DOMContentLoaded', function () {
+                  const input = document.getElementById('nama_tamu_input');
+                  const hidden = document.getElementById('nama_tamu_hidden');
+                  const options = document.querySelectorAll('#tamuList option');
+
+                  input.addEventListener('change', function () {
+                    const val = this.value;
+                    let found = false;
+
+                    options.forEach(opt => {
+                      if (opt.value === val) {
+                        hidden.value = opt.dataset.id;
+                        found = true;
+                      }
+                    });
+
+                    if (!found) {
+                      hidden.value = '';
+                    }
+                  });
+                });
+              </script>
+
+
+              <!-- /.card -->
+              </section>
+              <!-- /.Left col -->
+              <!-- right col (We are only adding the ID to make the widgets sortable)-->
+              <section class="col-lg-5 connectedSortable">
+
+                <!-- Map card -->
+
+
+
+
+
+
+
+            </div><!-- /.container-fluid -->
+            </section>
+            <!-- /.content -->
+          </div>
+          <!-- /.content-wrapper -->
+          <footer class="main-footer">
+            <strong>Copyright &copy; 2026</strong>
+            Wanfas Mitra Synergey.
+
+          </footer>
+
+          <!-- Control Sidebar -->
+          <aside class="control-sidebar control-sidebar-dark">
+            <!-- Control sidebar content goes here -->
+          </aside>
+          <!-- /.control-sidebar -->
+        </div>
+        <!-- ./wrapper -->
+
+        <!-- jQuery -->
+        <script src="{% static 'assets/plugins/jquery/jquery.min.js' %}"></script>
+        <!-- jQuery UI 1.11.4 -->
+        <script src="{% static 'assets/plugins/jquery-ui/jquery-ui.min.js' %}"></script>
+        <!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
+        <script>
+          $.widget.bridge('uibutton', $.ui.button)
+        </script>
+        <!-- Bootstrap 4 -->
+        <script src="{% static 'assets/plugins/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+        <!-- ChartJS -->
+        <script src="{% static 'assets/plugins/chart.js/Chart.min.js' %}"></script>
+        <!-- Sparkline -->
+        <script src="{% static 'assets/plugins/sparklines/sparkline.js' %}"></script>
+        <!-- JQVMap -->
+        <script src="{% static 'assets/plugins/jqvmap/jquery.vmap.min.js' %}"></script>
+        <script src="{% static 'assets/plugins/jqvmap/maps/jquery.vmap.usa.js' %}"></script>
+        <!-- jQuery Knob Chart -->
+        <script src="{% static 'assets/plugins/jquery-knob/jquery.knob.min.js' %}"></script>
+        <!-- daterangepicker -->
+        <script src="{% static 'assets/plugins/moment/moment.min.js' %}"></script>
+        <script src="{% static 'assets/plugins/daterangepicker/daterangepicker.js' %}"></script>
+        <!-- Tempusdominus Bootstrap 4 -->
+        <script
+          src="{% static 'assets/plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js' %}"></script>
+        <!-- Summernote -->
+        <script src="{% static 'assets/plugins/summernote/summernote-bs4.min.js' %}"></script>
+        <!-- overlayScrollbars -->
+        <script src="{% static 'assets/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js' %}"></script>
+        <!-- AdminLTE App -->
+        <script src="{% static 'assets/dist/js/adminlte.js' %}"></script>
+
+
+        <script src="{% static 'assets/dist/js/pages/dashboard.js' %}"></script>
+    </body>
+
+</html>

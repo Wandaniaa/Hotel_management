@@ -1,0 +1,34 @@
+import django.db.models.deletion
+from decimal import Decimal
+from django.db import migrations, models
+
+
+class Migration(migrations.Migration):
+
+    dependencies = [
+        ('hotel', '0035_booking_add_tanggal_booking'),
+    ]
+
+    operations = [
+        # Hapus tabel booking lama yang tidak lengkap
+        migrations.DeleteModel(name='Booking'),
+        # Buat ulang tabel booking dengan semua kolom yang benar
+        migrations.CreateModel(
+            name='Booking',
+            fields=[
+                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('jenis_kelamin', models.CharField(choices=[('M', 'Laki-laki'), ('F', 'Perempuan')], default='M', max_length=1)),
+                ('jumlah_dewasa', models.IntegerField(default=1)),
+                ('jumlah_anak', models.IntegerField(default=0)),
+                ('tanggal_booking', models.DateTimeField(auto_now_add=True)),
+                ('tanggal_check_in', models.DateTimeField()),
+                ('tanggal_check_out', models.DateTimeField()),
+                ('deposit_booking', models.DecimalField(decimal_places=2, default=0, max_digits=10)),
+                ('keterangan', models.TextField(blank=True)),
+                ('status', models.CharField(choices=[('pending', 'Pending'), ('confirmed', 'Dikonfirmasi'), ('checked_in', 'Sudah Check-In'), ('cancelled', 'Dibatalkan')], default='pending', max_length=20)),
+                ('aula', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, to='hotel.hall')),
+                ('kamar', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, to='hotel.room')),
+                ('nama_tamu', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='hotel.tamu')),
+            ],
+        ),
+    ]

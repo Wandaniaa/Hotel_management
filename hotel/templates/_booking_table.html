@@ -1,0 +1,34 @@
+{% load humanize %}
+{% for b in booking_pending_list %}
+<tr>
+    <td><strong>{{ b.nama_tamu.nama }}</strong></td>
+    <td>
+        {% if b.kamar %}
+        Kamar {{ b.kamar.no_kamar }}
+        {% elif b.aula %}
+        Aula {{ b.aula.nama }}
+        {% else %}
+        -
+        {% endif %}
+    </td>
+    <td>{{ b.tanggal_check_in|date:"d M Y H:i" }}</td>
+    <td>{{ b.tanggal_check_out|date:"d M Y H:i" }}</td>
+    <td>Rp {{ b.deposit_booking|intcomma }}</td>
+    <td>
+        {% if b.status == 'pending' %}
+        <span class="badge badge-warning">Pending</span>
+        {% elif b.status == 'confirmed' %}
+        <span class="badge badge-info">Dikonfirmasi</span>
+        {% endif %}
+    </td>
+    <td>
+        {% if b.status == 'pending' %}
+        <a href="{% url 'konfirmasi_booking' b.pk %}" class="btn btn-sm btn-success"
+            onclick="return confirm('Konfirmasi?')">Konfirmasi</a>
+        {% elif b.status == 'confirmed' %}
+        <a href="{% url 'booking_ke_checkin' b.pk %}" class="btn btn-sm btn-primary"
+            onclick="return confirm('Proses Check-In?')">Check-In</a>
+        {% endif %}
+    </td>
+</tr>
+{% endfor %}
