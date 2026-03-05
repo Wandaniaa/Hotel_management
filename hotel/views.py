@@ -31,7 +31,7 @@ from .models import Checkout, hitung_durasi_menginap
 from .models import RoomService
 from .forms import RoomServiceForm
 from .models import Booking
-from .forms import BookingForm
+from .forms import BookingForm, KonfirmasiBookingForm
 from django.utils.timezone import now
 from django.db import transaction
 import csv
@@ -1117,12 +1117,10 @@ def tambah_booking(request):
 
     rooms = Room.objects.filter(status='Tersedia')
     halls = Hall.objects.filter(status='available')
-    tamu_list = Tamu.objects.all()
     return render(request, 'tambah_booking.html', {
         'form': form,
         'rooms': rooms,
         'halls': halls,
-        'tamu_list': tamu_list,
     })
 
 
@@ -1155,13 +1153,39 @@ def hapus_booking(request, pk):
 
 def konfirmasi_booking(request, pk):
     booking = get_object_or_404(Booking, pk=pk)
-    if booking.status == 'pending':
-        booking.status = 'confirmed'
-        booking.save()
-        messages.success(request, f'Booking {booking.nama_tamu.nama} berhasil dikonfirmasi.')
-    else:
+    if booking.status != 'pending':
         messages.warning(request, 'Hanya booking berstatus Pending yang bisa dikonfirmasi.')
-    return redirect('booking_list')
+        return redirect('booking_list')
+
+    if request.method == 'POST':
+        form = KonfirmasiBookingForm(request.POST)
+        if form.is_valid():
+            mode = form.cleaned_data['mode']
+            if mode == 'existing':
+                tamu = form.cleaned_data['tamu_existing']
+            else:
+                tamu = Tamu.objects.create(
+                    nama=form.cleaned_data['nama'],
+                    warga_negara=form.cleaned_data['warga_negara'],
+                    no_identitas=form.cleaned_data['no_identitas'],
+                    no_hp=form.cleaned_data['no_hp'],
+                    email=form.cleaned_data['email'],
+                    alamat=form.cleaned_data['alamat'],
+                )
+
+            booking.nama_tamu = tamu
+            booking.jenis_kelamin = form.cleaned_data['jenis_kelamin']
+            booking.status = 'confirmed'
+            booking.save()
+            messages.success(request, f'Booking {tamu.nama} berhasil dikonfirmasi.')
+            return redirect('booking_list')
+    else:
+        form = KonfirmasiBookingForm()
+
+    return render(request, 'konfirmasi_booking.html', {
+        'form': form,
+        'booking': booking,
+    })
 
 
 def batalkan_booking(request, pk):

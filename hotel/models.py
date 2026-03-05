@@ -206,10 +206,16 @@ class Booking(models.Model):
         ('F', 'Perempuan'),
     ]
 
-    nama_tamu = models.ForeignKey(Tamu, on_delete=models.CASCADE)
+    # Data pemesan (diisi saat booking)
+    nama_pemesan = models.CharField(max_length=100)
+    no_hp_pemesan = models.CharField(max_length=15)
+
+    # Data tamu (diisi saat konfirmasi)
+    nama_tamu = models.ForeignKey(Tamu, on_delete=models.CASCADE, null=True, blank=True)
+    jenis_kelamin = models.CharField(max_length=1, choices=GENDER_CHOICES, blank=True, default='')
+
     kamar = models.ForeignKey(Room, on_delete=models.SET_NULL, null=True, blank=True)
     aula = models.ForeignKey(Hall, on_delete=models.SET_NULL, null=True, blank=True)
-    jenis_kelamin = models.CharField(max_length=1, choices=GENDER_CHOICES, default='M')
     jumlah_dewasa = models.IntegerField(default=1)
     jumlah_anak = models.IntegerField(default=0)
     tanggal_booking = models.DateTimeField(auto_now_add=True)
@@ -221,7 +227,8 @@ class Booking(models.Model):
 
     def __str__(self):
         target = self.kamar or self.aula
-        return f"Booking {self.nama_tamu.nama} - {target} [{self.get_status_display()}]"
+        nama = self.nama_tamu.nama if self.nama_tamu else self.nama_pemesan
+        return f"Booking {nama} - {target} [{self.get_status_display()}]"
 
 
 class CheckIn(models.Model):

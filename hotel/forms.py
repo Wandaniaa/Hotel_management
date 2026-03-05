@@ -193,22 +193,23 @@ class BookingForm(forms.ModelForm):
     class Meta:
         model = Booking
         fields = [
-            'nama_tamu', 'kamar', 'aula', 'jenis_kelamin',
+            'nama_pemesan', 'no_hp_pemesan',
+            'kamar', 'aula',
             'jumlah_dewasa', 'jumlah_anak',
             'tanggal_check_in', 'tanggal_check_out',
             'deposit_booking', 'keterangan',
         ]
         widgets = {
+            'nama_pemesan': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Nama pemesan'}),
+            'no_hp_pemesan': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'No HP pemesan'}),
             'tanggal_check_in': forms.DateTimeInput(attrs={
                 'type': 'datetime-local', 'class': 'form-control'
             }),
             'tanggal_check_out': forms.DateTimeInput(attrs={
                 'type': 'datetime-local', 'class': 'form-control'
             }),
-            'nama_tamu': forms.Select(attrs={'class': 'form-control'}),
             'kamar': forms.Select(attrs={'class': 'form-control'}),
             'aula': forms.Select(attrs={'class': 'form-control'}),
-            'jenis_kelamin': forms.Select(attrs={'class': 'form-control'}),
             'jumlah_dewasa': forms.NumberInput(attrs={'class': 'form-control', 'min': '0'}),
             'jumlah_anak': forms.NumberInput(attrs={'class': 'form-control', 'min': '0'}),
             'deposit_booking': forms.NumberInput(attrs={'class': 'form-control', 'step': '0.01'}),
@@ -219,3 +220,58 @@ class BookingForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         self.fields['kamar'].queryset = Room.objects.filter(status='Tersedia')
         self.fields['aula'].queryset = Hall.objects.filter(status='available')
+
+
+class KonfirmasiBookingForm(forms.Form):
+    GENDER_CHOICES = [
+        ('M', 'Laki-laki'),
+        ('F', 'Perempuan'),
+    ]
+
+    MODE_CHOICES = [
+        ('existing', 'Pilih Tamu yang Sudah Terdaftar'),
+        ('new', 'Input Tamu Baru'),
+    ]
+
+    mode = forms.ChoiceField(
+        choices=MODE_CHOICES,
+        widget=forms.RadioSelect(attrs={'class': 'form-check-input'}),
+        initial='existing',
+    )
+
+    # Pilih tamu existing
+    tamu_existing = forms.ModelChoiceField(
+        queryset=Tamu.objects.all(),
+        required=False,
+        widget=forms.Select(attrs={'class': 'form-control'}),
+        label='Pilih Tamu',
+    )
+
+    # Input tamu baru
+    nama = forms.CharField(max_length=100, required=False, widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Nama lengkap'}))
+    warga_negara = forms.CharField(max_length=50, required=False, widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Contoh: Indonesia'}))
+    no_identitas = forms.CharField(max_length=50, required=False, widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'No KTP/Paspor'}))
+    no_hp = forms.CharField(max_length=15, required=False, widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'No HP tamu'}))
+    email = forms.CharField(max_length=100, required=False, widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Email tamu'}))
+    alamat = forms.CharField(required=False, widget=forms.Textarea(attrs={'class': 'form-control', 'rows': 2, 'placeholder': 'Alamat tamu'}))
+
+    # Jenis kelamin (wajib)
+    jenis_kelamin = forms.ChoiceField(
+        choices=GENDER_CHOICES,
+        widget=forms.Select(attrs={'class': 'form-control'}),
+    )
+
+    def clean(self):
+        cleaned_data = super().clean()
+        mode = cleaned_data.get('mode')
+
+        if mode == 'existing':
+            if not cleaned_data.get('tamu_existing'):
+                raise forms.ValidationError('Silakan pilih tamu yang sudah terdaftar.')
+        elif mode == 'new':
+            required_fields = ['nama', 'warga_negara', 'no_identitas', 'no_hp', 'email', 'alamat']
+            missing = [f for f in required_fields if not cleaned_data.get(f)]
+            if missing:
+                raise forms.ValidationError(f'Data tamu baru belum lengkap: {", ".join(missing)}')
+
+        return cleaned_data

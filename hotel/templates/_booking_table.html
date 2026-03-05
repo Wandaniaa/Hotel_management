@@ -1,7 +1,13 @@
 {% load humanize %}
 {% for b in booking_pending_list %}
 <tr>
-    <td><strong>{{ b.nama_tamu.nama }}</strong></td>
+    <td>
+        {% if b.nama_tamu %}
+        <strong>{{ b.nama_tamu.nama }}</strong>
+        {% else %}
+        <strong>{{ b.nama_pemesan }}</strong>
+        {% endif %}
+    </td>
     <td>
         {% if b.kamar %}
         Kamar {{ b.kamar.no_kamar }}
